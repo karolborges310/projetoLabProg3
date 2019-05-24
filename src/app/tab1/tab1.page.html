@@ -1,0 +1,40 @@
+<ion-header>
+  <ion-toolbar>
+      <ion-buttons slot="end">
+          <ion-button (click)='onLogout()'>
+            <ion-icon slot="icon-only" name="log-out" color="danger"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+    <ion-title id="titulo">
+        <h1 horizontal="center"> <ion-datetime  [(ngModel)]="currentDATA" value={{RetornaDataHoraAtual()}} displayFormat="YYYY" min="2018" max="2025"></ion-datetime></h1>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-list>
+        <ion-item *ngFor="let topico of evento_ano">
+            <ion-list><h5 id="titulo">{{topico.mes}}</h5>
+          <ion-icon style="zoom:1.7;" color="medium" name="add" (click)="adicionarCampo(topico)"></ion-icon></ion-list>
+          
+          <ion-toolbar>
+            <ion-list>
+                  
+              <ion-item-sliding *ngFor="let item of topico.evento_mes">
+                <ion-item >
+                    <ion-datetime padding placeholder="{{item.dia}}" displayFormat="DD" id="secundarios"></ion-datetime>
+                    <ion-input  placeholder = ""></ion-input>
+                </ion-item>
+                <ion-item-options>
+                  <ion-item-option color="light">
+                    <ion-icon name="trash" (click)="deletarCampo(topico)" color="danger"style="zoom:1.7;"></ion-icon>
+                
+                </ion-item-option>
+                </ion-item-options>
+              </ion-item-sliding>
+          </ion-list>
+          </ion-toolbar>
+        </ion-item>
+    </ion-list>
+
+</ion-content>

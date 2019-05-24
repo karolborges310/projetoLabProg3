@@ -1,0 +1,23 @@
+<ion-header>
+  <ion-toolbar>
+      <ion-buttons slot="end">
+          <ion-button (click)='onLogout()'>
+            <ion-icon slot="icon-only" name="log-out" color="danger"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+    <ion-title id="titulo">
+        <h1 horizontal="center"> <ion-datetime [(ngModel)]="currentDATA" displayFormat="MMMM" value={{RetornaDataHoraAtual()}}></ion-datetime></h1>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+<ion-list>
+    <ion-item *ngFor="let item of inputs2">
+        <h6 padding id="secundarios">{{item.dia}} {{getsemana(item.dia)}}</h6>
+        <ion-input padding [(ngModel)]="item.title" placeholder = ""></ion-input>
+    </ion-item>
+</ion-list>
+
+</ion-content>
