@@ -16,7 +16,7 @@
   <ion-list>
     <ion-item-sliding *ngFor="let item of atualiza(currentDATA)">
         <ion-item>     
-            <ion-icon padding name={{item.tag}} (click)="item.tag = mudar(item.tag)"></ion-icon>
+            <ion-icon padding name={{item.tag}} (click)="item.tag = mudar_tag(item.tag)"></ion-icon>
                  <del *ngIf="item.tag === 'remove-circle'; else elseBlock"><ion-input   [(ngModel)]="item.title" placeholder = {{item.evento}}></ion-input></del>
                  <ng-template #elseBlock><ion-input   [(ngModel)]="item.title" placeholder = {{item.evento}}></ion-input>
                  </ng-template>
@@ -34,15 +34,15 @@
     <ion-icon name="add"></ion-icon>
   </ion-fab-button>
   <ion-fab-list side="top">
-    <ion-fab-button ion-button class="button" (click)="adicionarCampo2('radio-button-off')"><ion-icon name="radio-button-off"></ion-icon></ion-fab-button>
+    <ion-fab-button ion-button class="button" (click)="adicionarCampo('radio-button-off')"><ion-icon name="radio-button-off"></ion-icon></ion-fab-button>
   Tasks
   </ion-fab-list>
   <ion-fab-list side="start">
-    <ion-fab-button ion-button class="button" (click)="adicionarCampo2('aperture')"><ion-icon name="aperture"></ion-icon></ion-fab-button>
+    <ion-fab-button ion-button class="button" (click)="adicionarCampo('aperture')"><ion-icon name="aperture"></ion-icon></ion-fab-button>
   Events
   </ion-fab-list>
   <ion-fab-list side="end">
-    <ion-fab-button ion-button class="button" (click)="adicionarCampo2('remove')"><ion-icon name="remove"></ion-icon></ion-fab-button>
+    <ion-fab-button ion-button class="button" (click)="adicionarCampo('remove')"><ion-icon name="remove"></ion-icon></ion-fab-button>
   Notes
   </ion-fab-list>
 </ion-fab>
