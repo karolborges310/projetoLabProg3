@@ -16,8 +16,13 @@ campo: Array<{data: string, title: string, tag: string, evento:string}>;
 constructor(private auth: AuthenticationService, private httpClient: HttpClient) {
     this.currentDATA= this.RetornaDataHoraAtual();
     this.httpClient.get('http://localhost:3000' + '/data').subscribe((res)=>{
-      console.log(res[0].tag);
-      this.campo = [{data: res[0].data, title: res[0].title, tag: res[0].tag, evento: res[0].evento}];
+      console.log(res);
+
+      this.campo = []
+      for(var index in res){
+        //console.log(line);
+        this.campo.push({data: res[index].data, title: res[index].title, tag: res[index].tag, evento: res[index].evento});
+      }
     });
     //{data: "2019-05-27T00:00:00-03:00", title: "Trabalho", tag: "aperture", evento: "Tasks"}
 }
