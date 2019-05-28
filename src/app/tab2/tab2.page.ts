@@ -15,8 +15,8 @@ campo: Array<{data: string, title: string, tag: string, evento:string}>;
 
 constructor(private auth: AuthenticationService, private httpClient: HttpClient) {
     this.currentDATA= this.RetornaDataHoraAtual();
-    this.httpClient.get('http://localhost:3000' + '/data').subscribe((res)=>{
-      console.log(res);
+    this.httpClient.get('http://localhost:3000' + '/alldatatab2').subscribe((res)=>{
+      //console.log(res);
 
       this.campo = []
       for(var index in res){
@@ -35,8 +35,11 @@ atualiza(data: string | number | Date){
   var kar = this.campo.filter(function (comp) {
   var datadehoje = new Date(data);
   var localdatehoje = datadehoje.getFullYear() + '-' + (datadehoje.getMonth()+1) + '-' + datadehoje.getDate();
+  var DATA = new Date(comp.data);
+  var localdate = DATA.getFullYear() + '-' + (DATA.getMonth()+1) + '-' + DATA.getDate();
     if(comp.data === data) return true;
     if(comp.data === localdatehoje) return true;
+    if(data === localdate) return true; 
     else return false;
   });
   return kar;
@@ -47,9 +50,22 @@ adicionarCampo(tag: string){
   if(tag==="radio-button-off") eve= "Tasks";
   if(tag==="aperture") eve ="Events";
   if(tag==="remove") eve = "Notes";
-      this.campo.push({ data: this.currentDATA, title: "", tag: tag, evento: eve});
+  this.campo.push({ data: this.currentDATA, title: "", tag: tag, evento: eve});
+  //var new_line = [{ data: this.currentDATA, title: "", tag: tag, evento: eve}]
+  //console.log('new line added' + new_line)
+  this.httpClient.post('http://localhost:3000/createlinetab2',{
+    data: this.currentDATA,
+    title: "",
+    tag: tag,
+    evento: eve
+})
+  .subscribe(
+    res=>{console.log(res);},
+    err=>{
+      console.log('Error ocurred at adicionarCampo')
+    }
+  );
 }
-
 deletarCampo(currencie: { data: string; title: string; tag: string; evento: string; }){
     this.campo.splice(this.campo.indexOf(currencie),1);
 }
