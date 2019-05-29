@@ -25,8 +25,11 @@ atualiza(data){
   var kar = this.campo.filter(function (comp) {
   var datadehoje = new Date(data);
   var localdatehoje = datadehoje.getFullYear() + '-' + (datadehoje.getMonth()+1) + '-' + datadehoje.getDate();
+  var DATA = new Date(comp.data);
+  var localdate = DATA.getFullYear() + '-' + (DATA.getMonth()+1) + '-' + DATA.getDate();
     if(comp.data === data) return true;
     if(comp.data === localdatehoje) return true;
+    if(data === localdate) return true;
     else return false;
   });
   return kar;
@@ -40,16 +43,29 @@ adicionarCampo(tag){
       this.campo.push({ data: this.currentDATA, title: "", tag: tag, evento: eve});
 }
 
+diaseguinte(data){
+  var dant = new Date(data);
+  dant.setDate(dant.getDate() + 1);
+  var dseg = (dant.getFullYear()) + '-' + (dant.getMonth()+1) + '-' + (dant.getDate());
+  return dseg;
+}
+
 deletarCampo(currencie){
     this.campo.splice(this.campo.indexOf(currencie),1);
 }
 
-mudar_tag(tag){
+mudar_tag(tag, data, title,evento){
   if(tag==="aperture"|| tag=="remove") return tag;
   else {
     if(tag==="radio-button-off") return "close";
-    if(tag=== "close") return "arrow-dropright";
-    if(tag=== "arrow-dropright") return "arrow-dropleft";
+    if(tag=== "close"){ 
+      this.campo.push({ data: this.diaseguinte(data), title: title, tag: "radio-button-off", evento: evento});
+      return "arrow-dropright";
+    }
+    if(tag=== "arrow-dropright"){
+      this.deletarCampo({ data: this.diaseguinte(data), title: title, tag: "radio-button-off", evento: evento}); 
+      return "arrow-dropleft";
+    }
     if(tag=== "arrow-dropleft") return "remove-circle";
     if(tag=== "remove-circle") return "radio-button-off";
   }

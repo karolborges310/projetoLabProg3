@@ -15,8 +15,8 @@
 <ion-content>
   <ion-list>
     <ion-item-sliding *ngFor="let item of atualiza(currentDATA)">
-        <ion-item>     
-            <ion-icon padding name={{item.tag}} (click)="item.tag = mudar_tag(item.tag)"></ion-icon>
+        <ion-item>
+            <ion-icon padding name={{item.tag}} (click)="item.tag = mudar_tag(item.tag, item.data, item.title, item.evento)"></ion-icon>
                  <del *ngIf="item.tag === 'remove-circle'; else elseBlock"><ion-input   [(ngModel)]="item.title" placeholder = {{item.evento}}></ion-input></del>
                  <ng-template #elseBlock><ion-input   [(ngModel)]="item.title" placeholder = {{item.evento}}></ion-input>
                  </ng-template>
