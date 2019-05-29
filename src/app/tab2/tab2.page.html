@@ -22,8 +22,11 @@
                  </ng-template>
         </ion-item>
         <ion-item-options >
-          <ion-item-option color="light">
-            <ion-icon color="danger" style="zoom:1.6;" name="trash" (click)="deletarCampo(item)" ></ion-icon>
+          <ion-item-option color="danger">
+            <ion-icon color="light" slot="icon-only" style="zoom:1.1;" name="trash" (click)="deletarCampo(item)" ></ion-icon>
+        </ion-item-option>
+        <ion-item-option color="primary">
+          <ion-icon slot="icon-only" name="calendar" style="zoom:1.1;" color="light"></ion-icon>
         </ion-item-option>
         </ion-item-options>
     </ion-item-sliding>
