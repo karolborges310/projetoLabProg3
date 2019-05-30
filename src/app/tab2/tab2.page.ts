@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthenticationService } from '../services/authentication.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-tab2',
@@ -12,9 +13,18 @@ export class Tab2Page {
 currentDATA: string;
 campo: Array<{data: string, title: string, tag: string, evento:string}>;
 
-constructor(private auth: AuthenticationService) {
-    this.currentDATA= this.RetornaDataHoraAtual();
-    this.campo = []; 
+constructor(private auth: AuthenticationService, private httpClient: HttpClient) {
+  this.currentDATA= this.RetornaDataHoraAtual();
+  this.httpClient.get('http://localhost:3000' + '/alldatatab2').subscribe((res)=>{
+    //console.log(res);
+
+    this.campo = []
+    for(var index in res){
+      //console.log(line);
+      this.campo.push({data: res[index].data, title: res[index].title, tag: res[index].tag, evento: res[index].evento});
+    }
+  });
+  //{data: "2019-05-27T00:00:00-03:00", title: "Trabalho", tag: "aperture", evento: "Tasks"}
 }
 
 onLogout() {
@@ -35,12 +45,26 @@ atualiza(data){
   return kar;
 }
 
-adicionarCampo(tag){
-  var eve;
+adicionarCampo(tag: string){
+  var eve: string;
   if(tag==="radio-button-off") eve= "Tasks";
   if(tag==="aperture") eve ="Events";
   if(tag==="remove") eve = "Notes";
-      this.campo.push({ data: this.currentDATA, title: "", tag: tag, evento: eve});
+  this.campo.push({ data: this.currentDATA, title: "", tag: tag, evento: eve});
+  //var new_line = [{ data: this.currentDATA, title: "", tag: tag, evento: eve}]
+  //console.log('new line added' + new_line)
+  this.httpClient.post('http://localhost:3000/createlinetab2',{
+    data: this.currentDATA,
+    title: "",
+    tag: tag,
+    evento: eve
+})
+  .subscribe(
+    res=>{console.log(res);},
+    err=>{
+      console.log('Error ocurred at adicionarCampo')
+    }
+  );
 }
 
 diaseguinte(data){
