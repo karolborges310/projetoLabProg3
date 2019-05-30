@@ -9,7 +9,7 @@ import { HttpClient } from '@angular/common/http';
 })
 
 export class Tab2Page {
-
+auxTitle: string;
 currentDATA: string;
 campo: Array<{data: string, title: string, tag: string, evento:string}>;
 
@@ -30,7 +30,11 @@ constructor(private auth: AuthenticationService, private httpClient: HttpClient)
 onLogout() {
     this.auth.logout()
 }
-
+formatar(data){
+  var aux= new Date(data);
+  var dataformatada = (aux.getFullYear()) + '-' + (aux.getMonth()+1) + '-' + aux.getDate();
+return dataformatada;
+}
 atualiza(data){
   var kar = this.campo.filter(function (comp) {
   var datadehoje = new Date(data);
@@ -46,15 +50,16 @@ atualiza(data){
 }
 
 adicionarCampo(tag: string){
+  var data = this.formatar(this.currentDATA);
   var eve: string;
   if(tag==="radio-button-off") eve= "Tasks";
   if(tag==="aperture") eve ="Events";
   if(tag==="remove") eve = "Notes";
-  this.campo.push({ data: this.currentDATA, title: "", tag: tag, evento: eve});
+  this.campo.push({ data: data, title: "", tag: tag, evento: eve});
   //var new_line = [{ data: this.currentDATA, title: "", tag: tag, evento: eve}]
   //console.log('new line added' + new_line)
   this.httpClient.post('http://localhost:3000/createlinetab2',{
-    data: this.currentDATA,
+    data: data,
     title: "",
     tag: tag,
     evento: eve
@@ -66,6 +71,15 @@ adicionarCampo(tag: string){
     }
   );
 }
+updateLine(item){
+  this.httpClient.put('http://localhost:3000/updatelinetab2/'+item.data+'/'+this.auxTitle,{
+    title: item.title,
+    tag: item.tag
+  }).subscribe(
+    res=>{console.log(res);},
+    err=>{console.log('Error ocurred at update line')}
+  );
+}
 
 diaseguinte(data){
   var dant = new Date(data);
@@ -75,23 +89,95 @@ diaseguinte(data){
 }
 
 deletarCampo(currencie){
-    this.campo.splice(this.campo.indexOf(currencie),1);
+  console.log('Deletando a linha do dia'+currencie.data+' e com title '+currencie.title)
+  //if(currencie.title == )
+  this.httpClient.delete('http://localhost:3000/deletelinetab2/'+currencie.data+'/'+currencie.title).subscribe(
+    () => console.log('Deletando a linha do dia'+currencie.data+' e com title '+currencie.title),
+    (err) => console.log(err)
+  );
+  this.campo.splice(this.campo.indexOf(currencie),1);
 }
 
 mudar_tag(tag, data, title,evento){
-  if(tag==="aperture"|| tag=="remove") return tag;
+  if(tag==="aperture"|| tag=="remove"){
+    this.httpClient.put('http://localhost:3000/updatelinetab2/'+data+'/'+title,{
+      title: title,
+      tag: tag
+    }).subscribe(
+      res=>{console.log(res);},
+      err=>{console.log('Error ocurred at update line')}
+    );
+    return tag;
+  }
   else {
-    if(tag==="radio-button-off") return "close";
+    if(tag==="radio-button-off"){
+      this.httpClient.put('http://localhost:3000/updatelinetab2/'+data+'/'+title,{
+      title: title,
+      tag: "close"
+    }).subscribe(
+      res=>{console.log(res);},
+      err=>{console.log('Error ocurred at update line')}
+    );
+      return "close";
+    }
     if(tag=== "close"){ 
       this.campo.push({ data: this.diaseguinte(data), title: title, tag: "radio-button-off", evento: evento});
+      this.httpClient.post('http://localhost:3000/createlinetab2/',{
+        data: this.diaseguinte(data),
+        title: title,
+        tag: tag,
+        evento: evento
+    })
+      .subscribe(
+        res=>{console.log(res);},
+        err=>{
+          console.log('Error ocurred at adicionarCampo')
+        }
+  );
+  this.httpClient.put('http://localhost:3000/updatelinetab2/'+data+'/'+title,{
+    title: title,
+    tag: "arrow-dropright"
+  }).subscribe(
+    res=>{console.log(res);},
+    err=>{console.log('Error ocurred at update line')}
+  );
       return "arrow-dropright";
     }
     if(tag=== "arrow-dropright"){
-      this.deletarCampo({ data: this.diaseguinte(data), title: title, tag: "radio-button-off", evento: evento}); 
+      this.deletarCampo({ data: this.diaseguinte(data), title: title, tag: "radio-button-off", evento: evento});
+      this.httpClient.delete('http://localhost:3000/deletelinetab2/'+this.diaseguinte(data)+'/'+title).subscribe(
+        () => console.log('Deletando a linha do dia'+this.diaseguinte(data)+' e com title '+title),
+        (err) => console.log(err)
+    ); 
+    this.httpClient.put('http://localhost:3000/updatelinetab2/'+data+'/'+title,{
+      title: title,
+      tag: "arrow-dropleft"
+    }).subscribe(
+      res=>{console.log(res);},
+      err=>{console.log('Error ocurred at update line')}
+    );
       return "arrow-dropleft";
     }
-    if(tag=== "arrow-dropleft") return "remove-circle";
-    if(tag=== "remove-circle") return "radio-button-off";
+    if(tag=== "arrow-dropleft"){
+      this.httpClient.put('http://localhost:3000/updatelinetab2/'+data+'/'+title,{
+    title: title,
+    tag: "remove-circle"
+  }).subscribe(
+    res=>{console.log(res);},
+    err=>{console.log('Error ocurred at update line')}
+  );
+      return "remove-circle";
+    }
+    if(tag=== "remove-circle"){
+      this.httpClient.put('http://localhost:3000/updatelinetab2/'+data+'/'+title,{
+    title: title,
+    tag: "radio-button-off"
+  }).subscribe(
+    res=>{console.log(res);},
+    err=>{console.log('Error ocurred at update line')}
+  );
+      return "radio-button-off";
+    }
   }
 }
 
