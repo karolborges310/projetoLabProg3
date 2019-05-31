@@ -21,8 +21,8 @@
           <ion-list>    
             <ion-item-sliding *ngFor="let item of atualiza(topic.mes_num,currentDATA)">
               <ion-item >
-                  <ion-datetime padding placeholder="--" displayFormat="DD" id="secundarios" [(ngModel)]="item.data"></ion-datetime>
-                  <ion-input  [(ngModel)]="item.title" placeholder = "{{item.evento}}"></ion-input>
+                  <ion-datetime (ionFocus)="auxData=item.data" (ionChange)="item.data = formataAtualiza(item)" padding placeholder="--" displayFormat="DD" id="secundarios" [(ngModel)]="item.data"></ion-datetime>
+                  <ion-input (ionBlur)='updateLine(item)' (ionFocus)="auxTitle=item.title"  [(ngModel)]="item.title" placeholder = "{{item.evento}}"></ion-input>
               </ion-item>
               <ion-item-options>
                 <ion-item-option color="light">
