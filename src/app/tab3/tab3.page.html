@@ -25,7 +25,7 @@
             <ion-item-sliding *ngFor="let item of atualiza(topico.num_day,currentDATA)">
               <ion-item >
               
-                   <ion-input (ionChange)='updateLine(item)' (ionFocus)="auxTitle=item.title"  [(ngModel)]="item.title" placeholder = "{{item.evento}}"></ion-input>
+                   <ion-input (ionBlur)='updateLine(item)' (ionFocus)="auxTitle=item.title"  [(ngModel)]="item.title" placeholder = "{{item.evento}}"></ion-input>
               </ion-item>
               <ion-item-options>
                 <ion-item-option color="light">

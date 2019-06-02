@@ -14,7 +14,7 @@ export class LoginPage implements OnInit {
     
   }
 
-  login() {
-    this.authService.login();
+  login(form) {
+    this.authService.login(form);
   }
 }
