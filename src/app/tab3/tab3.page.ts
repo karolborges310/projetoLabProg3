@@ -15,10 +15,11 @@ export class Tab3Page {
   aux: Array<{num_day: string, week: string}>;
 
   constructor(private auth: AuthenticationService, private httpClient: HttpClient) {
+    const headers = {'Authorization': auth.email}
     this.currentDATA= this.RetornaDataHoraAtual();
     this.aux=[];
 
-    this.httpClient.get(auth.path + '/alldatatab3').subscribe((res)=>{
+    this.httpClient.get(auth.path + '/alldatatab3',{headers: headers}).subscribe((res)=>{
     //console.log(res);
 
     this.campo = []
@@ -79,18 +80,20 @@ nummaxmes(num_mes){
 }
 
 updateLine(item){
+const headers = {'Authorization': this.auth.email}
 console.log('dando update na tab1 com data = ' + item.data + ' e old title = '+ this.auxTitle);
 
   this.httpClient.put(this.auth.path+'/updatetitlelinetab3/'+item.data+'/'+this.auxTitle,{
     title: item.title,
     data: item.data,
-  }).subscribe(
+  },{headers: headers}).subscribe(
     res=>{console.log(res);},
     err=>{console.log('Error ocurred at update line')}
   );
 }
 
 adicionar(day, MesAno){
+  const headers = {'Authorization': this.auth.email}
   var ANO = new Date(MesAno);
   var data = (ANO.getFullYear()) + '-' + (ANO.getMonth()+1) + '-' + day;
   this.campo.push({ data: data, title: "", tag: "", evento: ""});
@@ -100,7 +103,7 @@ adicionar(day, MesAno){
     title: "",
     tag: "",
     evento: ""
-})
+},{headers: headers})
   .subscribe(
     res=>{console.log(res);},
     err=>{
@@ -110,8 +113,9 @@ adicionar(day, MesAno){
 }
   
 deletar(currencie){
+  const headers = {'Authorization': this.auth.email}
   console.log('Deletando a linha do dia'+currencie.data+' e com title '+currencie.title)
-  this.httpClient.delete(this.auth.path+'deletelinetab3/'+currencie.data+'/'+currencie.title).subscribe(
+  this.httpClient.delete(this.auth.path+'deletelinetab3/'+currencie.data+'/'+currencie.title,{headers: headers}).subscribe(
     () => console.log('Deletando a linha do dia'+currencie.data+' e com title '+currencie.title),
     (err) => console.log(err)
   );
