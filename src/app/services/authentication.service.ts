@@ -11,6 +11,7 @@ const TOKEN_KEY = 'auth-token';
 })
 export class AuthenticationService {
   path : string;
+  email : string;
  
   authenticationState = new BehaviorSubject(false);
  
@@ -30,12 +31,13 @@ export class AuthenticationService {
   }
  
   login(form) {
-    this.httpClient.post('http://localhost:3000/users/login',{
+    this.httpClient.post(this.path+'/users/login',{
     email: form.email,
     password: form.password
 })
   .subscribe(
     res=>{
+      this.email = form.email
       console.log('Login OK')
       console.log(res);
       return this.storage.set(TOKEN_KEY, 'Bearer 1234567').then(() => {
@@ -63,7 +65,7 @@ export class AuthenticationService {
   register(form){
 
     console.log('at authentication.service.ts registering user '+ form.name)
-    this.httpClient.post('http://localhost:3000/users/register',{
+    this.httpClient.post(this.path+'/users/register',{
     name: form.name,
     email: form.email,
     password: form.password

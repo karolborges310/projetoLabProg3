@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { AuthenticationService } from '../services/authentication.service';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { format } from 'util';
 
 @Component({
@@ -15,8 +15,12 @@ export class Tab1Page {
   currentDATA: string;
   meses: Array<{mes:string, mes_num: string}>;
   
+  
   constructor(private auth: AuthenticationService, private httpClient: HttpClient) {
-    this.httpClient.get(auth.path + '/alldatatab1').subscribe((res)=>{
+    console.log('the user email is '+ auth.email)
+    const headers = {'Authorization': auth.email}
+     
+    this.httpClient.get(auth.path + '/alldatatab1',{headers: headers}).subscribe((res)=>{
     //console.log(res);
 
     this.campo = []
@@ -55,11 +59,12 @@ formataAtualiza(item){
 }
 
 atualizar(item){
+  const headers = {'Authorization': this.auth.email}
   console.log('rodou atualizar com data: '+ item.data)
   this.httpClient.put(this.auth.path+'/updatedatalinetab1/'+this.auxData+'/'+item.title,{
     data: this.formatar(item),
     title: item.title,
-  }).subscribe(
+  },{headers: headers}).subscribe(
     res=>{console.log(res);},
     err=>{console.log('Error ocurred at update line')}
   );
@@ -74,9 +79,10 @@ return dataformatada;
 }
 
 updateLine(item){
+  const headers = {'Authorization': this.auth.email}
   this.httpClient.put(this.auth.path+'/updatetitlelinetab1/'+item.data+'/'+this.auxTitle,{
     title: item.title,
-  }).subscribe(
+  },{headers: headers}).subscribe(
     res=>{console.log(res);},
     err=>{console.log('Error ocurred at update line')}
   );
@@ -100,6 +106,7 @@ atualiza(mes,dataAno){
 }
 
 adicionar(mes,ano){
+  const headers = {'Authorization': this.auth.email}
   var ANO = new Date(ano);
   var an = ANO.getFullYear();
   var data = an + '-' + (mes) + '-' + '1';
@@ -109,7 +116,7 @@ adicionar(mes,ano){
     title: "",
     tag: "",
     evento: ""
-})
+},{headers: headers})
   .subscribe(
     res=>{console.log(res);},
     err=>{
@@ -119,7 +126,8 @@ adicionar(mes,ano){
 }
   
 deletar(currencie){
-  this.httpClient.delete(this.auth.path+'/deletelinetab1/'+currencie.data+'/'+currencie.title).subscribe(
+  const headers = {'Authorization': this.auth.email}
+  this.httpClient.delete(this.auth.path+'/deletelinetab1/'+currencie.data+'/'+currencie.title,{headers: headers}).subscribe(
     () => console.log('Deletando a linha do dia'+currencie.data+' e com title '+currencie.title),
     (err) => console.log(err)
   );
