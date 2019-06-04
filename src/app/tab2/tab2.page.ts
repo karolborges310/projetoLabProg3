@@ -11,11 +11,11 @@ import { HttpClient } from '@angular/common/http';
 export class Tab2Page {
 auxTitle: string;
 currentDATA: string;
-campo: Array<{data: string, title: string, tag: string, evento:string}>;
+campo: Array<{data: string, title: string, tag: string, evento:string}>;  
 
 constructor(private auth: AuthenticationService, private httpClient: HttpClient) {
   this.currentDATA= this.RetornaDataHoraAtual();
-  this.httpClient.get('http://localhost:3000' + '/alldatatab2').subscribe((res)=>{
+  this.httpClient.get(auth.path + '/alldatatab2').subscribe((res)=>{
     //console.log(res);
 
     this.campo = []
@@ -58,7 +58,7 @@ adicionarCampo(tag: string){
   this.campo.push({ data: data, title: "", tag: tag, evento: eve});
   //var new_line = [{ data: this.currentDATA, title: "", tag: tag, evento: eve}]
   //console.log('new line added' + new_line)
-  this.httpClient.post('http://localhost:3000/createlinetab2',{
+  this.httpClient.post(this.auth.path+'/createlinetab2',{
     data: data,
     title: "",
     tag: tag,
@@ -72,7 +72,7 @@ adicionarCampo(tag: string){
   );
 }
 updateLine(item){
-  this.httpClient.put('http://localhost:3000/updatelinetab2/'+item.data+'/'+this.auxTitle,{
+  this.httpClient.put(this.auth.path+'/updatelinetab2/'+item.data+'/'+this.auxTitle,{
     title: item.title,
     tag: item.tag
   }).subscribe(
@@ -91,7 +91,7 @@ diaseguinte(data){
 deletarCampo(currencie){
   console.log('Deletando a linha do dia'+currencie.data+' e com title '+currencie.title)
   //if(currencie.title == )
-  this.httpClient.delete('http://localhost:3000/deletelinetab2/'+currencie.data+'/'+currencie.title).subscribe(
+  this.httpClient.delete(this.auth.path+'/deletelinetab2/'+currencie.data+'/'+currencie.title).subscribe(
     () => console.log('Deletando a linha do dia'+currencie.data+' e com title '+currencie.title),
     (err) => console.log(err)
   );
@@ -100,7 +100,7 @@ deletarCampo(currencie){
 
 mudar_tag(tag, data, title,evento){
   if(tag==="aperture"|| tag=="remove"){
-    this.httpClient.put('http://localhost:3000/updatelinetab2/'+data+'/'+title,{
+    this.httpClient.put(this.auth.path+'/updatelinetab2/'+data+'/'+title,{
       title: title,
       tag: tag
     }).subscribe(
@@ -111,7 +111,7 @@ mudar_tag(tag, data, title,evento){
   }
   else {
     if(tag==="radio-button-off"){
-      this.httpClient.put('http://localhost:3000/updatelinetab2/'+data+'/'+title,{
+      this.httpClient.put(this.auth.path+'/updatelinetab2/'+data+'/'+title,{
       title: title,
       tag: "close"
     }).subscribe(
@@ -122,7 +122,7 @@ mudar_tag(tag, data, title,evento){
     }
     if(tag=== "close"){ 
       this.campo.push({ data: this.diaseguinte(data), title: title, tag: "radio-button-off", evento: evento});
-      this.httpClient.post('http://localhost:3000/createlinetab2/',{
+      this.httpClient.post(this.auth.path+'/createlinetab2/',{
         data: this.diaseguinte(data),
         title: title,
         tag: tag,
@@ -134,7 +134,7 @@ mudar_tag(tag, data, title,evento){
           console.log('Error ocurred at adicionarCampo')
         }
   );
-  this.httpClient.put('http://localhost:3000/updatelinetab2/'+data+'/'+title,{
+  this.httpClient.put(this.auth.path+'/updatelinetab2/'+data+'/'+title,{
     title: title,
     tag: "arrow-dropright"
   }).subscribe(
@@ -145,11 +145,11 @@ mudar_tag(tag, data, title,evento){
     }
     if(tag=== "arrow-dropright"){
       this.deletarCampo({ data: this.diaseguinte(data), title: title, tag: "radio-button-off", evento: evento});
-      this.httpClient.delete('http://localhost:3000/deletelinetab2/'+this.diaseguinte(data)+'/'+title).subscribe(
+      this.httpClient.delete(this.auth.path+'/deletelinetab2/'+this.diaseguinte(data)+'/'+title).subscribe(
         () => console.log('Deletando a linha do dia'+this.diaseguinte(data)+' e com title '+title),
         (err) => console.log(err)
     ); 
-    this.httpClient.put('http://localhost:3000/updatelinetab2/'+data+'/'+title,{
+    this.httpClient.put(this.auth.path+'/updatelinetab2/'+data+'/'+title,{
       title: title,
       tag: "arrow-dropleft"
     }).subscribe(
@@ -159,7 +159,7 @@ mudar_tag(tag, data, title,evento){
       return "arrow-dropleft";
     }
     if(tag=== "arrow-dropleft"){
-      this.httpClient.put('http://localhost:3000/updatelinetab2/'+data+'/'+title,{
+      this.httpClient.put(this.auth.path+'/updatelinetab2/'+data+'/'+title,{
     title: title,
     tag: "remove-circle"
   }).subscribe(
@@ -169,7 +169,7 @@ mudar_tag(tag, data, title,evento){
       return "remove-circle";
     }
     if(tag=== "remove-circle"){
-      this.httpClient.put('http://localhost:3000/updatelinetab2/'+data+'/'+title,{
+      this.httpClient.put(this.auth.path+'/updatelinetab2/'+data+'/'+title,{
     title: title,
     tag: "radio-button-off"
   }).subscribe(

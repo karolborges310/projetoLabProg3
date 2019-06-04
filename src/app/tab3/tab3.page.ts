@@ -18,7 +18,7 @@ export class Tab3Page {
     this.currentDATA= this.RetornaDataHoraAtual();
     this.aux=[];
 
-    this.httpClient.get('http://localhost:3000' + '/alldatatab3').subscribe((res)=>{
+    this.httpClient.get(auth.path + '/alldatatab3').subscribe((res)=>{
     //console.log(res);
 
     this.campo = []
@@ -81,7 +81,7 @@ nummaxmes(num_mes){
 updateLine(item){
 console.log('dando update na tab1 com data = ' + item.data + ' e old title = '+ this.auxTitle);
 
-  this.httpClient.put('http://localhost:3000/updatetitlelinetab3/'+item.data+'/'+this.auxTitle,{
+  this.httpClient.put(this.auth.path+'/updatetitlelinetab3/'+item.data+'/'+this.auxTitle,{
     title: item.title,
     data: item.data,
   }).subscribe(
@@ -95,7 +95,7 @@ adicionar(day, MesAno){
   var data = (ANO.getFullYear()) + '-' + (ANO.getMonth()+1) + '-' + day;
   this.campo.push({ data: data, title: "", tag: "", evento: ""});
 
-  this.httpClient.post('http://localhost:3000/createlinetab3',{
+  this.httpClient.post(this.auth.path+'/createlinetab3',{
     data: data,
     title: "",
     tag: "",
@@ -111,7 +111,7 @@ adicionar(day, MesAno){
   
 deletar(currencie){
   console.log('Deletando a linha do dia'+currencie.data+' e com title '+currencie.title)
-  this.httpClient.delete('http://localhost:3000/deletelinetab3/'+currencie.data+'/'+currencie.title).subscribe(
+  this.httpClient.delete(this.auth.path+'deletelinetab3/'+currencie.data+'/'+currencie.title).subscribe(
     () => console.log('Deletando a linha do dia'+currencie.data+' e com title '+currencie.title),
     (err) => console.log(err)
   );

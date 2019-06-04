@@ -16,7 +16,7 @@ export class Tab1Page {
   meses: Array<{mes:string, mes_num: string}>;
   
   constructor(private auth: AuthenticationService, private httpClient: HttpClient) {
-    this.httpClient.get('http://localhost:3000' + '/alldatatab1').subscribe((res)=>{
+    this.httpClient.get(auth.path + '/alldatatab1').subscribe((res)=>{
     //console.log(res);
 
     this.campo = []
@@ -56,7 +56,7 @@ formataAtualiza(item){
 
 atualizar(item){
   console.log('rodou atualizar com data: '+ item.data)
-  this.httpClient.put('http://localhost:3000/updatedatalinetab1/'+this.auxData+'/'+item.title,{
+  this.httpClient.put(this.auth.path+'/updatedatalinetab1/'+this.auxData+'/'+item.title,{
     data: this.formatar(item),
     title: item.title,
   }).subscribe(
@@ -74,7 +74,7 @@ return dataformatada;
 }
 
 updateLine(item){
-  this.httpClient.put('http://localhost:3000/updatetitlelinetab1/'+item.data+'/'+this.auxTitle,{
+  this.httpClient.put(this.auth.path+'/updatetitlelinetab1/'+item.data+'/'+this.auxTitle,{
     title: item.title,
   }).subscribe(
     res=>{console.log(res);},
@@ -104,7 +104,7 @@ adicionar(mes,ano){
   var an = ANO.getFullYear();
   var data = an + '-' + (mes) + '-' + '1';
   this.campo.push({ data: data, title: "", tag: "", evento: ""});
-  this.httpClient.post('http://localhost:3000/createlinetab1',{
+  this.httpClient.post(this.auth.path+'/createlinetab1',{
     data: data,
     title: "",
     tag: "",
@@ -119,7 +119,7 @@ adicionar(mes,ano){
 }
   
 deletar(currencie){
-  this.httpClient.delete('http://localhost:3000/deletelinetab1/'+currencie.data+'/'+currencie.title).subscribe(
+  this.httpClient.delete(this.auth.path+'/deletelinetab1/'+currencie.data+'/'+currencie.title).subscribe(
     () => console.log('Deletando a linha do dia'+currencie.data+' e com title '+currencie.title),
     (err) => console.log(err)
   );

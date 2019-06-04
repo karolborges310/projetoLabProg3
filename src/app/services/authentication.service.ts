@@ -10,10 +10,12 @@ const TOKEN_KEY = 'auth-token';
   providedIn: 'root'
 })
 export class AuthenticationService {
+  path : string;
  
   authenticationState = new BehaviorSubject(false);
  
   constructor(private storage: Storage, private plt: Platform, private httpClient: HttpClient) { 
+    this.path = 'http://localhost:3000'
     this.plt.ready().then(() => {
       this.checkToken();
     });
